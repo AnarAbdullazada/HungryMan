@@ -36,6 +36,7 @@ namespace SOG.Player
       {
         return;
       }
+
       GameObject meal = mealList[Random.Range(0, mealList.Count)];
       meal.transform.position = new Vector3(Random.Range(-10f, 10f), transform.position.y, 0);
       meal.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
