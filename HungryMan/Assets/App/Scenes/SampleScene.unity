@@ -166,7 +166,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c66c40f945bf9a40b4fb7452b52ecbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  burger: {fileID: 4632300609902873578, guid: 4dc1512280f4a2746a3b9f0be9f03e9f, type: 3}
+  Meals:
+  - {fileID: 4632300609902873578, guid: 4dc1512280f4a2746a3b9f0be9f03e9f, type: 3}
+  - {fileID: 4632300609902873578, guid: 94df979edebdaf2428a1315f6ce1f127, type: 3}
   frequency: 0
 --- !u!1 &519420028
 GameObject:
