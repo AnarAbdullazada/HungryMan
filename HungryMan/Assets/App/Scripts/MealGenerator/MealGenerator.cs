@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SOG.Player
+namespace SOG.MealGenerator
 {
   public class MealGenerator : MonoBehaviour
   {
@@ -13,6 +13,8 @@ namespace SOG.Player
     [SerializeField] private float frequency;
 
     private List<GameObject> mealList;
+
+    private List<GameObject> lostMealsList;
 
     private IEnumerator instantiateMeal;
 
@@ -42,14 +44,30 @@ namespace SOG.Player
       meal.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
       meal.SetActive(true);
       mealList.Remove(meal);
+      lostMealsList.Add(meal);
+      CheckLostMealList();
     }
+
+    private void CheckLostMealList()
+    {
+      for (int i = 0; i < lostMealsList.Count; i++)
+      {
+        if (lostMealsList[i].gameObject.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static)
+        {
+          mealList.Add(lostMealsList[i]);
+          lostMealsList.Remove(lostMealsList[i]);
+        }
+      }
+    }
+
 
     private void Start()
     {
       instantiateMeal = InstantiateMeal();
       mealList = new List<GameObject>();
+      lostMealsList = new List<GameObject>();
       StartCoroutine(instantiateMeal);
-      InvokeRepeating("GenerateMeal", 0.5f, 2f);
+      InvokeRepeating("GenerateMeal", 0.5f, frequency);
     }
   }
 }

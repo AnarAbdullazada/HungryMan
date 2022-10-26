@@ -169,7 +169,7 @@ MonoBehaviour:
   Meals:
   - {fileID: 4632300609902873578, guid: 4dc1512280f4a2746a3b9f0be9f03e9f, type: 3}
   - {fileID: 4632300609902873578, guid: 94df979edebdaf2428a1315f6ce1f127, type: 3}
-  frequency: 0
+  frequency: 2
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,6 +375,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1352770188}
+  - component: {fileID: 1352770189}
   - component: {fileID: 1352770187}
   - component: {fileID: 1352770186}
   m_Layer: 0
@@ -434,6 +435,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1352770189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352770185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b933f8ad98196b4697995d0ea19c39c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hungerTime: 3
 --- !u!1 &1565145382
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,6 +457,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1565145385}
+  - component: {fileID: 1565145386}
   - component: {fileID: 1565145384}
   - component: {fileID: 1565145383}
   m_Layer: 0
@@ -543,6 +558,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1565145386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1565145382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9de550a4c8d5fc74496835705c2d4a37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1813082483
 GameObject:
   m_ObjectHideFlags: 0
