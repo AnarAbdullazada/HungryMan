@@ -25,6 +25,21 @@ namespace SOG.Player
 
       playerRb.velocity = ((Vector2.right * InputHorizontal * movementSpeed) + (Vector2.up * playerRb.velocity.y)) * Time.deltaTime;
       
+      if (Input.touchCount > 0)
+      {
+        Touch touch = Input.GetTouch(0);
+        Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
+        if (touchPosition.x > 1)
+        {
+          playerRb.velocity = ((Vector2.right * 1 * movementSpeed) + (Vector2.up * playerRb.velocity.y)) * Time.deltaTime;
+        }
+        if (touchPosition.x < -1)
+        {
+          playerRb.velocity = ((Vector2.right * -1 * movementSpeed) + (Vector2.up * playerRb.velocity.y)) * Time.deltaTime;
+          transform.localScale = new Vector3(Mathf.Sign(InputHorizontal), 1, 1);
+        }
+      }
+
       if (InputHorizontal != 0)
       {
         transform.localScale = new Vector3(Mathf.Sign(InputHorizontal),1,1);
