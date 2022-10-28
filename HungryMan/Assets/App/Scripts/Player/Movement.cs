@@ -31,13 +31,15 @@ namespace SOG.Player
         Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
         if (touchPosition.x > 1)
         {
-          playerRb.velocity = ((Vector2.right * 1 * movementSpeed) + (Vector2.up * playerRb.velocity.y)) * Time.deltaTime;
+          playerRb.velocity = ((Vector2.right * 1 * movementSpeed) + (Vector2.up * playerRb.velocity.y)) * Time.deltaTime;  
         }
         if (touchPosition.x < -1)
         {
           playerRb.velocity = ((Vector2.right * -1 * movementSpeed) + (Vector2.up * playerRb.velocity.y)) * Time.deltaTime;
-          transform.localScale = new Vector3(Mathf.Sign(InputHorizontal), 1, 1);
         }
+
+        transform.localScale = new Vector3(Mathf.Sign(touchPosition.x), 1, 1);
+      
       }
 
       if (InputHorizontal != 0)
