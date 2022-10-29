@@ -34,18 +34,21 @@ namespace SOG.MealGenerator
 
     private void GenerateMeal()
     {
-      if (mealList.Count == 0)
+      if (GameManager.Instance.gameState == GameStateEnum.PLAY)
       {
-        return;
-      }
+        if (mealList.Count == 0)
+        {
+          return;
+        }
 
-      GameObject meal = mealList[Random.Range(0, mealList.Count)];
-      meal.transform.position = new Vector3(Random.Range(-10f, 10f), transform.position.y, 0);
-      meal.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-      meal.SetActive(true);
-      mealList.Remove(meal);
-      lostMealsList.Add(meal);
-      CheckLostMealList();
+        GameObject meal = mealList[Random.Range(0, mealList.Count)];
+        meal.transform.position = new Vector3(Random.Range(-10f, 10f), transform.position.y, 0);
+        meal.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        meal.SetActive(true);
+        mealList.Remove(meal);
+        lostMealsList.Add(meal);
+        CheckLostMealList();
+      }
     }
 
     private void CheckLostMealList()
@@ -68,6 +71,7 @@ namespace SOG.MealGenerator
       lostMealsList = new List<GameObject>();
       StartCoroutine(instantiateMeal);
       InvokeRepeating("GenerateMeal", 0.5f, frequency);
+        
     }
   }
 }

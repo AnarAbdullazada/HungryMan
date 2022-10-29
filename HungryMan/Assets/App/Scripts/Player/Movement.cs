@@ -10,7 +10,6 @@ namespace SOG.Player
 
     [SerializeField] private Rigidbody2D playerRb;
 
-    
     /* ************************************************************** */
     private void Start()
     {
@@ -51,7 +50,10 @@ namespace SOG.Player
 
     private void Update()
     {
-      PlayerMovement();
+      if (GameManager.Instance.gameState == GameStateEnum.PLAY)
+      {
+        PlayerMovement();
+      }
     }
 
   }

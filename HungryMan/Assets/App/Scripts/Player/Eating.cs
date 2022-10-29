@@ -27,6 +27,8 @@ namespace SOG.Player
       }
     }
 
+
+
     private void Start()
     {
       hungerTimer = hungerTime;
@@ -38,7 +40,11 @@ namespace SOG.Player
 
     private void Update()
     {
-      TimerForHunger();
+      if (GameManager.Instance.gameState == GameStateEnum.PLAY)
+      {
+        TimerForHunger();
+      }
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
