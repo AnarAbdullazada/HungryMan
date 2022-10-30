@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SOG.Meals;
+using DynamicBox.EventManagement;
+using SOG.UI.PauseAndLoose;
+using SOG.UI.GamePlayUI;
 
 namespace SOG.Player
 {
@@ -9,22 +12,17 @@ namespace SOG.Player
   {
     [SerializeField] private float hungerTime;
     private float hungerTimer;
-    private bool IsLosed = false;
 
     private void TimerForHunger()
     {
-      if (IsLosed)
-      {
         if (hungerTimer >= 0)
         {
           hungerTimer -= Time.deltaTime;
         }
         else
         {
-          Debug.Log("Game Over");
-          IsLosed = false;
+        EventManager.Instance.Raise(new PauseButtonPressedEvent(true));
         }
-      }
     }
 
 
@@ -32,10 +30,6 @@ namespace SOG.Player
     private void Start()
     {
       hungerTimer = hungerTime;
-
-      /*TEMPORARY*/
-      IsLosed = true;
-      /*TEMPORARY*/
     }
 
     private void Update()
@@ -59,6 +53,32 @@ namespace SOG.Player
         }
       }
     }
+
+
+
+    #region Unity Events
+    private void OnEnable()
+    {
+      EventManager.Instance.AddListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+    }
+
+    private void OnDisable()
+    {
+      EventManager.Instance.RemoveListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+
+    }
+
+    #endregion
+
+    #region Handlers
+
+    private void RestartButtonPressedEventHadnler(RestartButtonPressedEvent eventDetails)
+    {
+      hungerTimer = hungerTime;
+    }
+
+    #endregion
+
 
   }
 }

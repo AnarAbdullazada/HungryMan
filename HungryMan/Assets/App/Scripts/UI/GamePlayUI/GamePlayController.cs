@@ -15,7 +15,7 @@ namespace SOG.UI.GamePlayUI
     public void PauseButton()
     {
       SetActiveView(false);
-      EventManager.Instance.Raise(new PauseButtonPressedEvent());
+      EventManager.Instance.Raise(new PauseButtonPressedEvent(false));
     }
 
     public void SetActiveView(bool active)
@@ -31,6 +31,7 @@ namespace SOG.UI.GamePlayUI
       EventManager.Instance.AddListener<PlayButtonPressedEvent>(PlayButtonPressedEventHandler);
       EventManager.Instance.AddListener<ResumeButtonPressedEvent>(ResumeButtonPressedEventHadnler);
       EventManager.Instance.AddListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+      EventManager.Instance.AddListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
     }
 
     private void OnDisable()
@@ -39,7 +40,7 @@ namespace SOG.UI.GamePlayUI
       EventManager.Instance.RemoveListener<PlayButtonPressedEvent>(PlayButtonPressedEventHandler);
       EventManager.Instance.RemoveListener<ResumeButtonPressedEvent>(ResumeButtonPressedEventHadnler);
       EventManager.Instance.RemoveListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
-
+      EventManager.Instance.AddListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
     }
 
     #endregion
@@ -63,6 +64,11 @@ namespace SOG.UI.GamePlayUI
     private void RestartButtonPressedEventHadnler(RestartButtonPressedEvent eventDetails)
     {
       SetActiveView(true);
+    }
+
+    private void PauseButtonPressedEventHadnler(PauseButtonPressedEvent eventDetails)
+    {
+      SetActiveView(false);
     }
 
     #endregion

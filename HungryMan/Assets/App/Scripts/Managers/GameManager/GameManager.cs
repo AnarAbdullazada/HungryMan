@@ -24,6 +24,10 @@ public class GameManager : MonoBehaviour
     }
   }
 
+  private void Start()
+  {
+    Application.targetFrameRate = 60;
+  }
 
 
   #region Unity Events
@@ -50,21 +54,25 @@ public class GameManager : MonoBehaviour
   private void PlayButtonPressedEventHandler(PlayButtonPressedEvent eventDetails)
   {
     gameState = GameStateEnum.PLAY;
+    Time.timeScale = 1f;
   }
 
   private void ResumeButtonPressedEventHadnler(ResumeButtonPressedEvent eventDetails)
   {
     gameState = GameStateEnum.PLAY;
+    Time.timeScale = 1f;
   }
 
   private void RestartButtonPressedEventHadnler(RestartButtonPressedEvent eventDetails)
   {
     gameState = GameStateEnum.PLAY;
+    Time.timeScale = 1f;
   }
 
   private void PauseButtonPressedEventHadnler(PauseButtonPressedEvent eventDetails)
   {
     gameState = GameStateEnum.PAUSE;
+    Time.timeScale = 0f;
   }
 
 

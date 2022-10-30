@@ -1,3 +1,5 @@
+using DynamicBox.EventManagement;
+using SOG.UI.PauseAndLoose;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,9 +40,10 @@ namespace SOG.MealGenerator
       {
         if (mealList.Count == 0)
         {
+          Debug.Log("3");
           return;
         }
-
+        Debug.Log("4");
         GameObject meal = mealList[Random.Range(0, mealList.Count)];
         meal.transform.position = new Vector3(Random.Range(-10f, 10f), transform.position.y, 0);
         meal.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
@@ -48,6 +51,7 @@ namespace SOG.MealGenerator
         mealList.Remove(meal);
         lostMealsList.Add(meal);
         CheckLostMealList();
+        Debug.Log("9");
       }
     }
 
@@ -63,16 +67,53 @@ namespace SOG.MealGenerator
       }
     }
 
+    private void RestartState()
+    {
+      for (int i = 0; i < lostMealsList.Count; i++)
+      {
+        lostMealsList[i].SetActive(false);
+        lostMealsList[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+        mealList.Add(lostMealsList[i]);
+        lostMealsList.Remove(lostMealsList[i]);
+      }
+    }
 
     private void Start()
     {
       instantiateMeal = InstantiateMeal();
       mealList = new List<GameObject>();
       lostMealsList = new List<GameObject>();
+
       StartCoroutine(instantiateMeal);
       InvokeRepeating("GenerateMeal", 0.5f, frequency);
         
     }
+
+    #region Unity Events
+    private void OnEnable()
+    {
+      EventManager.Instance.AddListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+    }
+
+    private void OnDisable()
+    {
+      EventManager.Instance.RemoveListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+
+    }
+
+    #endregion
+
+    #region Handlers
+
+    private void RestartButtonPressedEventHadnler(RestartButtonPressedEvent eventDetails)
+    {
+      RestartState();
+    }
+
+    #endregion
+
+
+
   }
 }
 

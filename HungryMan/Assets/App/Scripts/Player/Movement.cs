@@ -1,3 +1,5 @@
+using DynamicBox.EventManagement;
+using SOG.UI.PauseAndLoose;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +11,6 @@ namespace SOG.Player
     [SerializeField] private float movementSpeed;
 
     [SerializeField] private Rigidbody2D playerRb;
-
-    /* ************************************************************** */
-    private void Start()
-    {
-      Application.targetFrameRate = 60;
-    }
-    /* ************************************************************** */
 
 
     private void PlayerMovement()
@@ -55,6 +50,30 @@ namespace SOG.Player
         PlayerMovement();
       }
     }
+
+    #region Unity Events
+    private void OnEnable()
+    {
+      EventManager.Instance.AddListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+    }
+
+    private void OnDisable()
+    {
+      EventManager.Instance.RemoveListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+
+    }
+
+    #endregion
+
+    #region Handlers
+
+    private void RestartButtonPressedEventHadnler(RestartButtonPressedEvent eventDetails)
+    {
+      gameObject.transform.position = new Vector3(0, -4.5f, 0);
+    }
+
+    #endregion
+
 
   }
 }

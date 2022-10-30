@@ -38,11 +38,13 @@ namespace SOG.UI.PauseAndLoose
     private void OnEnable()
     {
       EventManager.Instance.AddListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
+      EventManager.Instance.AddListener<UIScoreUpdateEvent>(UIScoreUpdateEventHandler);
     }
 
     private void OnDisable()
     {
       EventManager.Instance.RemoveListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
+      EventManager.Instance.AddListener<UIScoreUpdateEvent>(UIScoreUpdateEventHandler);
     }
 
     #endregion
@@ -51,8 +53,20 @@ namespace SOG.UI.PauseAndLoose
     private void PauseButtonPressedEventHadnler(PauseButtonPressedEvent eventDetails)
     {
       SetActiveView(true);
+      if (eventDetails.isLosed)
+      {
+        view.Losed();
+      }
+      else if (!eventDetails.isLosed)
+      {
+        view.Paused();
+      }
     }
 
+    private void UIScoreUpdateEventHandler(UIScoreUpdateEvent eventDetails)
+    {
+      view.UpdateScoreText(eventDetails.newScore);
+    }
 
     #endregion
 

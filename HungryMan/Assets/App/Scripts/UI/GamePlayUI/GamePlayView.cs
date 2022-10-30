@@ -13,7 +13,7 @@ namespace SOG.UI.GamePlayUI
 
     [Header("View properties")]
     [SerializeField] private TMP_Text scoreText;
-    [SerializeField] private TMP_Text bestText;
+
 
     public void PauseButton()
     {
@@ -25,10 +25,7 @@ namespace SOG.UI.GamePlayUI
       scoreText.text = Convert.ToString(score);
     }
 
-    public void UpdateBestScoreText(int bestScore)
-    {
-      bestText.text = Convert.ToString(bestScore);
-    }
+
 
   }
 }
