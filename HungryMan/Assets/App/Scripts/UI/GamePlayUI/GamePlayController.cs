@@ -12,6 +12,8 @@ namespace SOG.UI.GamePlayUI
     [Header("View Reference")]
     [SerializeField] private GamePlayView view;
 
+    private float hungerTime, hungerTimer;
+
     public void PauseButton()
     {
       SetActiveView(false);
@@ -23,10 +25,33 @@ namespace SOG.UI.GamePlayUI
       view.gameObject.SetActive(active);
     }
 
+    private void UpdateHungerBar()
+    {
+      if (hungerTimer >= 0)
+      {
+        hungerTimer -= Time.deltaTime;
+        view.UpdateHungerBar((hungerTimer*1000)/hungerTime);
+      }
+    }
+
+    private void Start()
+    {
+      hungerTimer = hungerTime;
+    }
+
+    private void Update()
+    {
+      if (GameManager.Instance.gameState == GameStateEnum.PLAY)
+      {
+        UpdateHungerBar();
+      }
+
+    }
 
     #region Unity Events
     private void OnEnable()
     {
+      EventManager.Instance.AddListener<GetHungerTimeEvent>(GetHungerTimeEventHandler);
       EventManager.Instance.AddListener<UIScoreUpdateEvent>(UIScoreUpdateEventHandler);
       EventManager.Instance.AddListener<PlayButtonPressedEvent>(PlayButtonPressedEventHandler);
       EventManager.Instance.AddListener<ResumeButtonPressedEvent>(ResumeButtonPressedEventHadnler);
@@ -36,11 +61,12 @@ namespace SOG.UI.GamePlayUI
 
     private void OnDisable()
     {
+      EventManager.Instance.RemoveListener<GetHungerTimeEvent>(GetHungerTimeEventHandler);
       EventManager.Instance.RemoveListener<UIScoreUpdateEvent>(UIScoreUpdateEventHandler);
       EventManager.Instance.RemoveListener<PlayButtonPressedEvent>(PlayButtonPressedEventHandler);
       EventManager.Instance.RemoveListener<ResumeButtonPressedEvent>(ResumeButtonPressedEventHadnler);
       EventManager.Instance.RemoveListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
-      EventManager.Instance.AddListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
+      EventManager.Instance.RemoveListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
     }
 
     #endregion
@@ -49,6 +75,7 @@ namespace SOG.UI.GamePlayUI
     private void UIScoreUpdateEventHandler(UIScoreUpdateEvent eventDetails)
     {
       view.UpdateScoreText(eventDetails.newScore);
+      hungerTimer = hungerTime;
     }
 
     private void PlayButtonPressedEventHandler(PlayButtonPressedEvent eventDetails)
@@ -69,6 +96,11 @@ namespace SOG.UI.GamePlayUI
     private void PauseButtonPressedEventHadnler(PauseButtonPressedEvent eventDetails)
     {
       SetActiveView(false);
+    }
+
+    private void GetHungerTimeEventHandler(GetHungerTimeEvent eventDetails)
+    {
+      hungerTime = eventDetails.hungerTime;
     }
 
     #endregion

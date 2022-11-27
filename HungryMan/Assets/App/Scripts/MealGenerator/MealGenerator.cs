@@ -26,11 +26,13 @@ namespace SOG.MealGenerator
     {
       for (int i = 0; i < Meals.Length; i++)
       {
+
         GameObject instantiateObject = Instantiate(Meals[i], new Vector3(0, 0, 0), Quaternion.identity, transform);
         instantiateObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         instantiateObject.SetActive(false);
         mealList.Add(instantiateObject);
         yield return new WaitForSeconds(0.05f);
+
       }
     }
 
@@ -40,10 +42,8 @@ namespace SOG.MealGenerator
       {
         if (mealList.Count == 0)
         {
-          Debug.Log("3");
           return;
         }
-        Debug.Log("4");
         GameObject meal = mealList[Random.Range(0, mealList.Count)];
         meal.transform.position = new Vector3(Random.Range(-10f, 10f), transform.position.y, 0);
         meal.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
@@ -51,7 +51,6 @@ namespace SOG.MealGenerator
         mealList.Remove(meal);
         lostMealsList.Add(meal);
         CheckLostMealList();
-        Debug.Log("9");
       }
     }
 
@@ -86,7 +85,7 @@ namespace SOG.MealGenerator
 
       StartCoroutine(instantiateMeal);
       InvokeRepeating("GenerateMeal", 0.5f, frequency);
-        
+
     }
 
     #region Unity Events

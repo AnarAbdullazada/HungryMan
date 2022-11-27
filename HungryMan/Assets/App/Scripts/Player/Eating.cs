@@ -41,6 +41,11 @@ namespace SOG.Player
         
     }
 
+    private void Awake()
+    {
+      EventManager.Instance.Raise(new GetHungerTimeEvent(hungerTime));
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
       if (collision.gameObject.CompareTag("Eatable"))
