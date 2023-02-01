@@ -34,13 +34,13 @@ namespace SOG.Managers.ScoreManager
     private void UpdateScoreEventHandler(UpdateScoreEvent eventDetails)
     {
       currentScore += eventDetails.score;
-      EventManager.Instance.Raise(new UIScoreUpdateEvent(currentScore));
+      EventManager.Instance.Raise(new UIScoreUpdateEvent(currentScore,eventDetails.isItSatiate));
     }
 
     private void RestartButtonPressedEventHadnler(RestartButtonPressedEvent eventDetails)
     {
       currentScore = 0;
-      EventManager.Instance.Raise(new UIScoreUpdateEvent(currentScore));
+      EventManager.Instance.Raise(new UIScoreUpdateEvent(currentScore,true));
     }
     #endregion
 

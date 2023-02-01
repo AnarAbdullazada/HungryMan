@@ -21,7 +21,7 @@ namespace SOG.Meals
     {
       gameObject.SetActive(false);
       gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-      EventManager.Instance.Raise(new UpdateScoreEvent(scoreForEat));
+      EventManager.Instance.Raise(new UpdateScoreEvent(scoreForEat, satiate));
     }
 
     public void Loss()

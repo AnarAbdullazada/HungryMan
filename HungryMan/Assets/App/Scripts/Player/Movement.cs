@@ -12,11 +12,11 @@ namespace SOG.Player
 
     [SerializeField] private Rigidbody2D playerRb;
 
-    [SerializeField] private GameObject bVirus;
+    [SerializeField] private float jumpForce;
 
-    [SerializeField] private float rotationSpped;
+    [SerializeField] private bool isJumpable;
 
-    private float rotZ;
+    [SerializeField] private bool restarted;
 
     private void PlayerMovement()
     {
@@ -28,29 +28,35 @@ namespace SOG.Player
         Touch touch = Input.GetTouch(0);
         Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
         if (touchPosition.x > 1)
-        
         {
           playerRb.velocity = ((Vector2.right * 1 * movementSpeed) + (Vector2.up * playerRb.velocity.y)) * Time.deltaTime;
-          rotZ += -rotationSpped * Time.deltaTime;
         }
         if (touchPosition.x < -1)
         {
           playerRb.velocity = ((Vector2.right * -1 * movementSpeed) + (Vector2.up * playerRb.velocity.y)) * Time.deltaTime;
-          rotZ += rotationSpped * Time.deltaTime;
         }
 
         transform.localScale = new Vector3(Mathf.Sign(touchPosition.x), 1, 1);
-        bVirus.transform.rotation = Quaternion.Euler(0, 0, rotZ);
-
       }
       if (InputHorizontal != 0)
       {
         transform.localScale = new Vector3(Mathf.Sign(InputHorizontal),1,1);
-        rotZ += -Mathf.Sign(InputHorizontal)*rotationSpped*Time.deltaTime;
-        bVirus.transform.rotation = Quaternion.Euler(0, 0, rotZ);
+        if (isJumpable)
+        {
+          playerRb.AddForce(transform.up* jumpForce,ForceMode2D.Impulse);
+          isJumpable = false;
+        }
       }
+    }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+      if (collision.gameObject.CompareTag("Ground")) isJumpable = true;
+    }
 
+    private void Start()
+    {
+      isJumpable = true;
     }
 
     private void Update()
@@ -58,6 +64,15 @@ namespace SOG.Player
       if (GameManager.Instance.gameState == GameStateEnum.PLAY)
       {
         PlayerMovement();
+      }
+    }
+
+    private void FixedUpdate()
+    {
+      if (GameManager.Instance.gameState == GameStateEnum.PLAY && restarted)
+      {
+        playerRb.drag = 0;
+        restarted = false;
       }
     }
 
@@ -79,7 +94,9 @@ namespace SOG.Player
 
     private void RestartButtonPressedEventHadnler(RestartButtonPressedEvent eventDetails)
     {
-      gameObject.transform.position = new Vector3(0, -3.128f, 0);
+      gameObject.transform.position = new Vector3(0, -2.752f, 0);
+      playerRb.drag = 200;
+      restarted = true;
     }
 
     #endregion

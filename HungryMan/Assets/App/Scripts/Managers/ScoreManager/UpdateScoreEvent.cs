@@ -6,9 +6,12 @@ namespace SOG.Managers.ScoreManager
   {
     public int score;
 
-    public UpdateScoreEvent(int _score)
+    public bool isItSatiate;
+
+    public UpdateScoreEvent(int _score, bool _isItSatiate)
     {
       score = _score;
+      isItSatiate = _isItSatiate;
     }
   }
 }

@@ -75,7 +75,7 @@ namespace SOG.UI.GamePlayUI
     private void UIScoreUpdateEventHandler(UIScoreUpdateEvent eventDetails)
     {
       view.UpdateScoreText(eventDetails.newScore);
-      hungerTimer = hungerTime;
+      if(eventDetails.isItSatiate) hungerTimer = hungerTime;
     }
 
     private void PlayButtonPressedEventHandler(PlayButtonPressedEvent eventDetails)

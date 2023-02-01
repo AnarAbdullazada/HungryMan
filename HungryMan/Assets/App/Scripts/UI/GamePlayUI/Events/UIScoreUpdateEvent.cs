@@ -6,9 +6,12 @@ namespace SOG.UI.GamePlayUI
   {
     public int newScore;
 
-    public UIScoreUpdateEvent(int _newScore)
+    public bool isItSatiate;
+
+    public UIScoreUpdateEvent(int _newScore, bool _isItSatiate)
     {
       newScore = _newScore;
+      isItSatiate = _isItSatiate;
     }
   }
 }

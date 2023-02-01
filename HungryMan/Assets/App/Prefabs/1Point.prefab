@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4632300609902873582}
-  - component: {fileID: 3054654900812876600}
+  - component: {fileID: 2748383618541190766}
   - component: {fileID: 4632300609902873583}
   - component: {fileID: 4632300609902873580}
-  - component: {fileID: 4632300609902873581}
+  - component: {fileID: 5718648289805573227}
   m_Layer: 0
   m_Name: 1Point
   m_TagString: Eatable
@@ -34,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3054654900812876600
+--- !u!114 &2748383618541190766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreForEat: 1
-  satiate: 1
+  satiate: 0
 --- !u!212 &4632300609902873583
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_SortingLayerID: -2034465533
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5332235770028548612, guid: 72800c3d20478d443a835264a643a529, type: 3}
+  m_Sprite: {fileID: 7407145471326388395, guid: 0e2063cb8a4b9e042aae3fe10978b3d8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -120,8 +120,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &4632300609902873581
-CircleCollider2D:
+--- !u!61 &5718648289805573227
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -133,6 +133,16 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0019074082, y: -0.0019074082}
+  m_Offset: {x: 0, y: -0.0023128986}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.4375, y: 0.5}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.7327067
+  m_Size: {x: 0.984375, y: 1.3961077}
+  m_EdgeRadius: 0
