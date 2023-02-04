@@ -1,5 +1,7 @@
 using DynamicBox.EventManagement;
+using SOG.UI.GamePlayUI;
 using SOG.UI.PauseAndLoose;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,17 +14,14 @@ namespace SOG.Player
 
     [SerializeField] private Rigidbody2D playerRb;
 
-    [SerializeField] private float jumpForce;
-
     [SerializeField] private bool isJumpable;
-
-    [SerializeField] private bool restarted;
 
     private void PlayerMovement()
     {
+      float vertical = 0f;
       float InputHorizontal = Input.GetAxis("Horizontal");
-
       playerRb.velocity = ((Vector2.right * InputHorizontal * movementSpeed) + (Vector2.up * playerRb.velocity.y)) * Time.deltaTime;
+      
       if (Input.touchCount > 0)
       {
         Touch touch = Input.GetTouch(0);
@@ -37,15 +36,51 @@ namespace SOG.Player
         }
 
         transform.localScale = new Vector3(Mathf.Sign(touchPosition.x), 1, 1);
+
+        if (InputHorizontal > 0.5 || InputHorizontal < -0.5)
+        {
+          if (isJumpable)
+          {
+            playerRb.velocity = ((Vector2.right * playerRb.velocity.x) + (Vector2.up * ((float)(Math.Pow(playerRb.velocity.x, 2)))));
+            isJumpable = false;
+          }
+        }
       }
       if (InputHorizontal != 0)
       {
         transform.localScale = new Vector3(Mathf.Sign(InputHorizontal),1,1);
+        PlayerRotation();
+      }
+      if (InputHorizontal>0.5 || InputHorizontal <-0.5)
+      {
         if (isJumpable)
         {
-          playerRb.AddForce(transform.up* jumpForce,ForceMode2D.Impulse);
+          vertical = 10f;
           isJumpable = false;
         }
+        playerRb.velocity = ((Vector2.right * playerRb.velocity.x) + (Vector2.up * (10-vertical)));
+        vertical -= 1;
+      }
+    }
+
+    private void PlayerRotation()
+    {
+      float velocityY = playerRb.velocity.y;
+      float maxVelocityY = 0.0f;
+      float rotation = 0f;
+      /*if (playerRb.velocity.x > 0) velocityX = (float)Math.Pow(playerRb.velocity.x, 2);
+      if (playerRb.velocity.x < 0) velocityX = -1*(float)Math.Pow(playerRb.velocity.x, 2);*/
+      Debug.Log(playerRb.velocity.y);
+      if (velocityY > maxVelocityY)
+      {
+        maxVelocityY = velocityY;
+        if (playerRb.velocity.x > 0) transform.localRotation = Quaternion.Euler(0, 0, 200 * maxVelocityY);
+        if (playerRb.velocity.x < 0) transform.localRotation = Quaternion.Euler(0, 0, -200 * maxVelocityY);
+      }
+      else
+      {
+        if (playerRb.velocity.x > 0) transform.localRotation = Quaternion.Euler(0, 0, -200 * velocityY);
+        if (playerRb.velocity.x < 0) transform.localRotation = Quaternion.Euler(0, 0, 200 * velocityY);
       }
     }
 
@@ -67,24 +102,18 @@ namespace SOG.Player
       }
     }
 
-    private void FixedUpdate()
-    {
-      if (GameManager.Instance.gameState == GameStateEnum.PLAY && restarted)
-      {
-        playerRb.drag = 0;
-        restarted = false;
-      }
-    }
-
     #region Unity Events
     private void OnEnable()
     {
       EventManager.Instance.AddListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+      EventManager.Instance.AddListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
+
     }
 
     private void OnDisable()
     {
       EventManager.Instance.RemoveListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+      EventManager.Instance.RemoveListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
 
     }
 
@@ -95,8 +124,14 @@ namespace SOG.Player
     private void RestartButtonPressedEventHadnler(RestartButtonPressedEvent eventDetails)
     {
       gameObject.transform.position = new Vector3(0, -2.752f, 0);
-      playerRb.drag = 200;
-      restarted = true;
+    }
+
+    private void PauseButtonPressedEventHadnler(PauseButtonPressedEvent eventDetails)
+    {
+      if (eventDetails.isLosed)
+      {
+
+      }
     }
 
     #endregion

@@ -3866,7 +3866,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!114 &1352770187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3879,11 +3879,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdccb094d49c7bf4896944cd980e278b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 600
+  movementSpeed: 400
   playerRb: {fileID: 1352770186}
-  jumpForce: 1000
   isJumpable: 0
-  restarted: 0
 --- !u!4 &1352770188
 Transform:
   m_ObjectHideFlags: 0
@@ -3911,7 +3909,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b933f8ad98196b4697995d0ea19c39c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hungerTime: 3
+  hungerTime: 20
 --- !u!1 &1405191712
 GameObject:
   m_ObjectHideFlags: 0
@@ -5092,7 +5090,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.27274752}
+  m_Offset: {x: 0, y: -0.24943638}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -5103,7 +5101,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.15434456}
+  m_Size: {x: 1, y: 0.03260851}
   m_EdgeRadius: 0
 --- !u!1 &1824272742
 GameObject:

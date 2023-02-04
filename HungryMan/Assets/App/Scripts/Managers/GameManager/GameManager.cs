@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
   private void PauseButtonPressedEventHadnler(PauseButtonPressedEvent eventDetails)
   {
     gameState = GameStateEnum.PAUSE;
-    Time.timeScale = 0f;
+    Time.timeScale = 1f;
   }
 
 
