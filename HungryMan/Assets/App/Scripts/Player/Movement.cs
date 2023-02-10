@@ -10,18 +10,29 @@ namespace SOG.Player
 {
   public class Movement : MonoBehaviour
   {
+    [Header ("Properties")]
     [SerializeField] private float movementSpeed;
 
-    [SerializeField] private Rigidbody2D playerRb;
+    [SerializeField] private int verticalSpeed;
+
+    [SerializeField] private int fallSpeed;
 
     [SerializeField] private bool isJumpable;
 
+    [Header("Links")]
+    [SerializeField] private Rigidbody2D playerRb;
+
+    [SerializeField] private Animator animator;
+
+    //Internal variables
+    private Vector2 gravVector;
+
     private void PlayerMovement()
     {
-      float vertical = 0f;
       float InputHorizontal = Input.GetAxis("Horizontal");
+
       playerRb.velocity = ((Vector2.right * InputHorizontal * movementSpeed) + (Vector2.up * playerRb.velocity.y)) * Time.deltaTime;
-      
+
       if (Input.touchCount > 0)
       {
         Touch touch = Input.GetTouch(0);
@@ -49,40 +60,26 @@ namespace SOG.Player
       if (InputHorizontal != 0)
       {
         transform.localScale = new Vector3(Mathf.Sign(InputHorizontal),1,1);
-        PlayerRotation();
       }
-      if (InputHorizontal>0.5 || InputHorizontal <-0.5)
+      animator.SetBool("IsJump", false);
+      if (InputHorizontal > 0.8 || InputHorizontal < -0.8)
       {
         if (isJumpable)
         {
-          vertical = 10f;
+          animator.SetBool("IsJump", true);
+          playerRb.velocity = (Vector2.right * playerRb.velocity.x) + (Vector2.up * verticalSpeed);
           isJumpable = false;
         }
-        playerRb.velocity = ((Vector2.right * playerRb.velocity.x) + (Vector2.up * (10-vertical)));
-        vertical -= 1;
       }
+
+      if (playerRb.velocity.y < 0)
+      {
+        playerRb.velocity -= gravVector * fallSpeed * Time.deltaTime;
+      }
+
     }
 
-    private void PlayerRotation()
-    {
-      float velocityY = playerRb.velocity.y;
-      float maxVelocityY = 0.0f;
-      float rotation = 0f;
-      /*if (playerRb.velocity.x > 0) velocityX = (float)Math.Pow(playerRb.velocity.x, 2);
-      if (playerRb.velocity.x < 0) velocityX = -1*(float)Math.Pow(playerRb.velocity.x, 2);*/
-      Debug.Log(playerRb.velocity.y);
-      if (velocityY > maxVelocityY)
-      {
-        maxVelocityY = velocityY;
-        if (playerRb.velocity.x > 0) transform.localRotation = Quaternion.Euler(0, 0, 200 * maxVelocityY);
-        if (playerRb.velocity.x < 0) transform.localRotation = Quaternion.Euler(0, 0, -200 * maxVelocityY);
-      }
-      else
-      {
-        if (playerRb.velocity.x > 0) transform.localRotation = Quaternion.Euler(0, 0, -200 * velocityY);
-        if (playerRb.velocity.x < 0) transform.localRotation = Quaternion.Euler(0, 0, 200 * velocityY);
-      }
-    }
+
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -91,7 +88,9 @@ namespace SOG.Player
 
     private void Start()
     {
+      gravVector = new Vector2(0, -Physics2D.gravity.y);
       isJumpable = true;
+
     }
 
     private void Update()
@@ -102,18 +101,20 @@ namespace SOG.Player
       }
     }
 
+
     #region Unity Events
     private void OnEnable()
     {
       EventManager.Instance.AddListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
       EventManager.Instance.AddListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
-
+      EventManager.Instance.AddListener<ResumeButtonPressedEvent>(ResumeButtonPressedEventHandler);
     }
 
     private void OnDisable()
     {
       EventManager.Instance.RemoveListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
       EventManager.Instance.RemoveListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
+      EventManager.Instance.RemoveListener<ResumeButtonPressedEvent>(ResumeButtonPressedEventHandler);
 
     }
 
@@ -124,14 +125,22 @@ namespace SOG.Player
     private void RestartButtonPressedEventHadnler(RestartButtonPressedEvent eventDetails)
     {
       gameObject.transform.position = new Vector3(0, -2.752f, 0);
+      playerRb.bodyType = RigidbodyType2D.Dynamic;
     }
 
     private void PauseButtonPressedEventHadnler(PauseButtonPressedEvent eventDetails)
     {
+      playerRb.velocity = Vector2.zero;
+      playerRb.bodyType = RigidbodyType2D.Static;
       if (eventDetails.isLosed)
       {
 
       }
+    }
+
+    private void ResumeButtonPressedEventHandler(ResumeButtonPressedEvent eventDetails)
+    {
+      playerRb.bodyType = RigidbodyType2D.Dynamic;
     }
 
     #endregion

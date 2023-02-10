@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d64a91991fcb00448aa473141fed4fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreForEat: 1
+  scoreForEat: 0
   satiate: 1
 --- !u!212 &4632300609902873583
 SpriteRenderer:
@@ -114,7 +114,7 @@ Rigidbody2D:
   m_Mass: 0.0001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0.8
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -133,6 +133,6 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0019074082, y: -0.0019074082}
+  m_Offset: {x: 0.001899302, y: -0.030457735}
   serializedVersion: 2
-  m_Radius: 0.7327067
+  m_Radius: 0.28541565
