@@ -1,4 +1,5 @@
 using DynamicBox.EventManagement;
+using SOG.Meals;
 using SOG.UI.PauseAndLoose;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,19 +21,43 @@ namespace SOG.MealGenerator
 
     private IEnumerator instantiateMeal;
 
+    private int count = 10;
+
+    private int id = 0;
+
     #endregion
 
     private IEnumerator InstantiateMeal()
     {
       for (int i = 0; i < Meals.Length; i++)
       {
-
-        GameObject instantiateObject = Instantiate(Meals[i], new Vector3(0, 0, 0), Quaternion.identity, transform);
-        instantiateObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-        instantiateObject.SetActive(false);
-        mealList.Add(instantiateObject);
-        yield return new WaitForSeconds(0.05f);
-
+        int score = Meals[i].gameObject.GetComponent<NormalMeals>().GetScoreForEat();
+        if (score == 0)
+        {
+          for (int j = 0; j < 10; j++)
+          {
+            GameObject instantiateObject = Instantiate(Meals[i], new Vector3(0, 0, 0), Quaternion.identity, transform);
+            instantiateObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+            instantiateObject.gameObject.GetComponent<NormalMeals>().id = id;
+            instantiateObject.SetActive(false);
+            mealList.Add(instantiateObject);
+            yield return new WaitForSeconds(0.05f);
+            id++;
+          }
+        }
+        else
+        {
+          for (int j = 0; j < (count / score); j++)
+          {
+            GameObject instantiateObject = Instantiate(Meals[i], new Vector3(0, 0, 0), Quaternion.identity, transform);
+            instantiateObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+            instantiateObject.gameObject.GetComponent<NormalMeals>().id = id;
+            instantiateObject.SetActive(false);
+            mealList.Add(instantiateObject);
+            yield return new WaitForSeconds(0.05f);
+            id++;
+          }
+        }
       }
     }
 
@@ -48,7 +73,10 @@ namespace SOG.MealGenerator
         meal.transform.position = new Vector3(Random.Range(-10f, 10f), transform.position.y, 0);
         meal.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         meal.SetActive(true);
-        mealList.Remove(meal);
+        for (int i = 0; i < mealList.Count; i++)
+        {
+          if(meal.gameObject.GetComponent<NormalMeals>().id == mealList[i].gameObject.GetComponent<NormalMeals>().id) mealList.RemoveAt(i);
+        }
         lostMealsList.Add(meal);
         CheckLostMealList();
       }
@@ -61,7 +89,7 @@ namespace SOG.MealGenerator
         if (lostMealsList[i].gameObject.GetComponent<Rigidbody2D>().bodyType == RigidbodyType2D.Static)
         {
           mealList.Add(lostMealsList[i]);
-          lostMealsList.Remove(lostMealsList[i]);
+          lostMealsList.RemoveAt(i);
         }
       }
     }
@@ -73,7 +101,7 @@ namespace SOG.MealGenerator
         lostMealsList[i].SetActive(false);
         lostMealsList[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         mealList.Add(lostMealsList[i]);
-        lostMealsList.Remove(lostMealsList[i]);
+        lostMealsList.RemoveAt(i);
       }
     }
 
@@ -92,11 +120,13 @@ namespace SOG.MealGenerator
     private void OnEnable()
     {
       EventManager.Instance.AddListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+      EventManager.Instance.AddListener<MainMenuButtonPressedEvent>(MainMenuButtonPressedEventHandler);
     }
 
     private void OnDisable()
     {
       EventManager.Instance.RemoveListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
+      EventManager.Instance.RemoveListener<MainMenuButtonPressedEvent>(MainMenuButtonPressedEventHandler);
 
     }
 
@@ -105,6 +135,12 @@ namespace SOG.MealGenerator
     #region Handlers
 
     private void RestartButtonPressedEventHadnler(RestartButtonPressedEvent eventDetails)
+    {
+      RestartState();
+      RestartState();
+    }
+
+    private void MainMenuButtonPressedEventHandler(MainMenuButtonPressedEvent eventDetails)
     {
       RestartState();
     }

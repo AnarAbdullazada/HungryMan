@@ -13,8 +13,9 @@ namespace SOG.UI.MainMenuUI
 
     public void PlayButton()
     {
-      EventManager.Instance.Raise(new PlayButtonPressedEvent());
       SetActiveView(false);
+      EventManager.Instance.Raise(new RestartButtonPressedEvent());
+      EventManager.Instance.Raise(new PlayButtonPressedEvent());
     }
 
     public void SettingsButton()

@@ -13,6 +13,19 @@ namespace SOG.Meals
   {
     [SerializeField] private int scoreForEat;
     [SerializeField] private bool satiate;
+    [SerializeField] private int ID;
+
+    public int GetScoreForEat()
+    {
+      return scoreForEat;
+    }
+
+    public int id
+    {
+      get { return ID; }
+
+      set { ID = value; }
+    }
 
     private Rigidbody2D rb;
 
