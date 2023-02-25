@@ -48,6 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreForEat: 1
   satiate: 0
+  ID: 0
+  audioSource: {fileID: 0}
 --- !u!212 &4632300609902873583
 SpriteRenderer:
   m_ObjectHideFlags: 0

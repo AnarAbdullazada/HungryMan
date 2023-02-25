@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreForEat: 0
   satiate: 1
+  ID: 0
 --- !u!212 &4632300609902873583
 SpriteRenderer:
   m_ObjectHideFlags: 0

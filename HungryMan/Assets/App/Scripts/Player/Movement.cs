@@ -24,6 +24,8 @@ namespace SOG.Player
 
     [SerializeField] private Animator animator;
 
+    [SerializeField] private AudioSource audioSource;
+
     //Internal variables
     private Vector2 gravVector;
 
@@ -68,6 +70,7 @@ namespace SOG.Player
         {
           animator.SetBool("IsJump", true);
           playerRb.velocity = (Vector2.right * playerRb.velocity.x) + (Vector2.up * verticalSpeed);
+          audioSource.Play();
           isJumpable = false;
         }
       }

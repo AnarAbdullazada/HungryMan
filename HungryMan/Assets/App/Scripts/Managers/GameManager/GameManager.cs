@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
   public GameStateEnum gameState;
 
+  [SerializeField] private AudioSource source;
+
   private void Awake()
   {
     if (Instance != null && Instance != this)
@@ -73,6 +75,7 @@ public class GameManager : MonoBehaviour
   {
     gameState = GameStateEnum.PAUSE;
     Time.timeScale = 1f;
+    if (eventDetails.isLosed) source.Play();
   }
 
 
