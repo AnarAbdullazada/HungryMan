@@ -11,20 +11,26 @@ namespace SOG.UI.MainMenuUI
     [Header("View reference")]
     [SerializeField] private MainMenuView view;
 
+    [SerializeField] private AudioSource audioSource;
+
+
     public void PlayButton()
     {
       SetActiveView(false);
+      audioSource.Play();
       EventManager.Instance.Raise(new RestartButtonPressedEvent());
       EventManager.Instance.Raise(new PlayButtonPressedEvent());
     }
 
     public void SettingsButton()
     {
+      audioSource.Play();
       EventManager.Instance.Raise(new SettingsButtonPressedEvent());
     }
 
     public void CreditsButton()
     {
+      audioSource.Play();
       EventManager.Instance.Raise(new CreditsButtonPressedEvent());
     }
 

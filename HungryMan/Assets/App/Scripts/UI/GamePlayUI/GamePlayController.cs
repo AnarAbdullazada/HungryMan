@@ -12,11 +12,14 @@ namespace SOG.UI.GamePlayUI
     [Header("View Reference")]
     [SerializeField] private GamePlayView view;
 
+    [SerializeField] private AudioSource audioSource;
+
     private float hungerTime, hungerTimer;
 
     public void PauseButton()
     {
       SetActiveView(false);
+      audioSource.Play();
       EventManager.Instance.Raise(new PauseButtonPressedEvent(false));
     }
 

@@ -11,8 +11,11 @@ namespace SOG.UI.PauseAndLoose
     [Header("View reference")]
     [SerializeField] private PauseAndLooseView view;
 
+    [SerializeField] private AudioSource audioSource;
+
     public void Resume()
     {
+      audioSource.Play();
       SetActiveView(false);
       EventManager.Instance.Raise(new ResumeButtonPressedEvent());
     }
@@ -20,11 +23,13 @@ namespace SOG.UI.PauseAndLoose
     public void Restart()
     {
       SetActiveView(false);
+      audioSource.Play();
       EventManager.Instance.Raise(new RestartButtonPressedEvent());
     }
 
     public void MainMenu()
     {
+      audioSource.Play();
       SetActiveView(false);
       EventManager.Instance.Raise(new MainMenuButtonPressedEvent());
     }
