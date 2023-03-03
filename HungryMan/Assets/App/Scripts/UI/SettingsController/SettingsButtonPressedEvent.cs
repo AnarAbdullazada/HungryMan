@@ -1,6 +1,6 @@
 using DynamicBox.EventManagement;
 
-namespace SOG.UI.MainMenuUI
+namespace SOG.UI.SettingsController
 {
   public class SettingsButtonPressedEvent : GameEvent
   {

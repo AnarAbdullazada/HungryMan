@@ -1,5 +1,6 @@
 using DynamicBox.EventManagement;
 using SOG.UI.PauseAndLoose;
+using SOG.UI.SettingsController;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,12 +26,14 @@ namespace SOG.UI.MainMenuUI
     public void SettingsButton()
     {
       audioSource.Play();
+      SetActiveView(false);
       EventManager.Instance.Raise(new SettingsButtonPressedEvent());
     }
 
     public void CreditsButton()
     {
       audioSource.Play();
+      SetActiveView(false);
       EventManager.Instance.Raise(new CreditsButtonPressedEvent());
     }
 
