@@ -1,4 +1,5 @@
 using DynamicBox.EventManagement;
+using SOG.Player;
 using SOG.UI.MainMenuUI;
 using SOG.UI.PauseAndLoose;
 using System.Collections;
@@ -21,6 +22,13 @@ namespace SOG.UI.GamePlayUI
       SetActiveView(false);
       audioSource.Play();
       EventManager.Instance.Raise(new PauseButtonPressedEvent(false));
+    }
+
+    public void TapTo()
+    {
+      EventManager.Instance.Raise(new FinishedIntroductionEvent());
+      Time.timeScale = 1f;
+      view.HungerBarPanel(false);
     }
 
     public void SetActiveView(bool active)
@@ -60,6 +68,10 @@ namespace SOG.UI.GamePlayUI
       EventManager.Instance.AddListener<ResumeButtonPressedEvent>(ResumeButtonPressedEventHadnler);
       EventManager.Instance.AddListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
       EventManager.Instance.AddListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
+      EventManager.Instance.AddListener<LeftMovementEvent>(LeftMovementEventHadnler);
+      EventManager.Instance.AddListener<RightMovementEvent>(RightMovementEventHadnler);
+      EventManager.Instance.AddListener<FirstTimeMovementEvent>(FirstTimeMovementEventHadnler);
+
     }
 
     private void OnDisable()
@@ -70,6 +82,10 @@ namespace SOG.UI.GamePlayUI
       EventManager.Instance.RemoveListener<ResumeButtonPressedEvent>(ResumeButtonPressedEventHadnler);
       EventManager.Instance.RemoveListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
       EventManager.Instance.RemoveListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
+      EventManager.Instance.RemoveListener<LeftMovementEvent>(LeftMovementEventHadnler);
+      EventManager.Instance.RemoveListener<RightMovementEvent>(RightMovementEventHadnler);
+      EventManager.Instance.RemoveListener<FirstTimeMovementEvent>(FirstTimeMovementEventHadnler);
+
     }
 
     #endregion
@@ -78,7 +94,7 @@ namespace SOG.UI.GamePlayUI
     private void UIScoreUpdateEventHandler(UIScoreUpdateEvent eventDetails)
     {
       view.UpdateScoreText(eventDetails.newScore);
-      if(eventDetails.isItSatiate) hungerTimer = hungerTime;
+      if (eventDetails.isItSatiate) hungerTimer = hungerTime;
     }
 
     private void PlayButtonPressedEventHandler(PlayButtonPressedEvent eventDetails)
@@ -106,6 +122,24 @@ namespace SOG.UI.GamePlayUI
       hungerTime = eventDetails.hungerTime;
     }
 
+    private void LeftMovementEventHadnler(LeftMovementEvent eventDetails)
+    {
+      view.LefttPanel(true);
+    }
+
+    private void RightMovementEventHadnler(RightMovementEvent eventDetails)
+    {
+      view.LefttPanel(false);
+      view.RightPanel(true);
+    }
+
+    private void FirstTimeMovementEventHadnler(FirstTimeMovementEvent eventDetails)
+    {
+      view.LefttPanel(false);
+      view.RightPanel(false);
+      view.HungerBarPanel(true);
+      Time.timeScale = 0f;
+    }
     #endregion
 
   }

@@ -35,7 +35,7 @@ namespace SOG.UI.PauseAndLoose
 
     public void UpdateBestScoreText(int bestScore)
     {
-      bestText.text = Convert.ToString(bestScore);
+      bestText.text ="Best Score: " + Convert.ToString(bestScore);
     }
 
     public void UpdateScoreText(int score)

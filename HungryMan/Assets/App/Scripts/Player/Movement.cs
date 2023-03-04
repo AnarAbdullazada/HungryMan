@@ -1,4 +1,5 @@
 using DynamicBox.EventManagement;
+using SOG.Managers.SaveManager;
 using SOG.UI.GamePlayUI;
 using SOG.UI.PauseAndLoose;
 using System;
@@ -26,8 +27,15 @@ namespace SOG.Player
 
     [SerializeField] private AudioSource audioSource;
 
+    [SerializeField] private GameObject rightTarget;
+
+    [SerializeField] private GameObject leftTarget;
+
+
     //Internal variables
     private Vector2 gravVector;
+
+    private bool isFirstTime, leftMovement, rightMovement;
 
     private void PlayerMovement()
     {
@@ -50,15 +58,26 @@ namespace SOG.Player
 
         transform.localScale = new Vector3(Mathf.Sign(touchPosition.x), 1, 1);
 
-        if (InputHorizontal > 0.5 || InputHorizontal < -0.5)
+        animator.SetBool("IsJump", false);
+        if (touchPosition.x > 0.8 || touchPosition.x < -0.8)
         {
           if (isJumpable)
           {
-            playerRb.velocity = ((Vector2.right * playerRb.velocity.x) + (Vector2.up * ((float)(Math.Pow(playerRb.velocity.x, 2)))));
+            animator.SetBool("IsJump", true);
+            playerRb.velocity = (Vector2.right * playerRb.velocity.x) + (Vector2.up * verticalSpeed);
+            audioSource.Play();
             isJumpable = false;
           }
         }
+
+        if (playerRb.velocity.y < 0)
+        {
+          playerRb.velocity -= gravVector * fallSpeed * Time.deltaTime;
+        }
       }
+
+
+
       if (InputHorizontal != 0)
       {
         transform.localScale = new Vector3(Mathf.Sign(InputHorizontal),1,1);
@@ -82,7 +101,25 @@ namespace SOG.Player
 
     }
 
+    private void MovementIntroduction()
+    {
+      float leftDistance = Vector2.Distance(leftTarget.transform.position, gameObject.transform.position);
+      if (!leftMovement)
+      {
+        EventManager.Instance.Raise(new LeftMovementEvent());
+      }
+      if (leftDistance < 1 && !leftMovement)
+      {
+        leftMovement = true;
+        EventManager.Instance.Raise(new RightMovementEvent());
+        return;
+      }
 
+      float rightDistance = Vector2.Distance(rightTarget.transform.position, gameObject.transform.position);
+      if (rightDistance < 1 && !rightMovement && leftMovement) { rightMovement = true; return; }
+
+      if(rightMovement && leftMovement) { isFirstTime = false; EventManager.Instance.Raise(new FirstTimeMovementEvent()); ; return; }
+    }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -93,7 +130,7 @@ namespace SOG.Player
     {
       gravVector = new Vector2(0, -Physics2D.gravity.y);
       isJumpable = true;
-
+      
     }
 
     private void Update()
@@ -101,6 +138,8 @@ namespace SOG.Player
       if (GameManager.Instance.gameState == GameStateEnum.PLAY)
       {
         PlayerMovement();
+        if (isFirstTime) { MovementIntroduction();}
+        
       }
     }
 
@@ -111,6 +150,9 @@ namespace SOG.Player
       EventManager.Instance.AddListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
       EventManager.Instance.AddListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
       EventManager.Instance.AddListener<ResumeButtonPressedEvent>(ResumeButtonPressedEventHandler);
+      EventManager.Instance.AddListener<FinishedIntroductionEvent>(FinishedIntroductionEventHandler);
+      EventManager.Instance.AddListener<ItIsFirsTimeEvent>(ItIsFirsTimeEventHandler);
+
     }
 
     private void OnDisable()
@@ -118,6 +160,8 @@ namespace SOG.Player
       EventManager.Instance.RemoveListener<RestartButtonPressedEvent>(RestartButtonPressedEventHadnler);
       EventManager.Instance.RemoveListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
       EventManager.Instance.RemoveListener<ResumeButtonPressedEvent>(ResumeButtonPressedEventHandler);
+      EventManager.Instance.RemoveListener<FinishedIntroductionEvent>(FinishedIntroductionEventHandler);
+      EventManager.Instance.AddListener<ItIsFirsTimeEvent>(ItIsFirsTimeEventHandler);
 
     }
 
@@ -144,6 +188,21 @@ namespace SOG.Player
     private void ResumeButtonPressedEventHandler(ResumeButtonPressedEvent eventDetails)
     {
       playerRb.bodyType = RigidbodyType2D.Dynamic;
+    }
+
+    private void FinishedIntroductionEventHandler(FinishedIntroductionEvent eventDetails)
+    {
+      isFirstTime = false;
+    }
+
+    private void ItIsFirsTimeEventHandler(ItIsFirsTimeEvent eventDetails)
+    {
+      if (eventDetails.isFirstTime)
+      {
+        isFirstTime = true;
+        leftMovement = false;
+        rightMovement = false;
+      }
     }
 
     #endregion

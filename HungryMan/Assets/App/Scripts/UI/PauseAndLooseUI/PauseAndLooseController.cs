@@ -13,6 +13,8 @@ namespace SOG.UI.PauseAndLoose
 
     [SerializeField] private AudioSource audioSource;
 
+    private int BestScore, currentScore;
+
     public void Resume()
     {
       audioSource.Play();
@@ -44,12 +46,16 @@ namespace SOG.UI.PauseAndLoose
     {
       EventManager.Instance.AddListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
       EventManager.Instance.AddListener<UIScoreUpdateEvent>(UIScoreUpdateEventHandler);
+      EventManager.Instance.AddListener<BestScoreEventFromUi>(BestScoreEventHandler);
+
     }
 
     private void OnDisable()
     {
       EventManager.Instance.RemoveListener<PauseButtonPressedEvent>(PauseButtonPressedEventHadnler);
-      EventManager.Instance.AddListener<UIScoreUpdateEvent>(UIScoreUpdateEventHandler);
+      EventManager.Instance.RemoveListener<UIScoreUpdateEvent>(UIScoreUpdateEventHandler);
+      EventManager.Instance.RemoveListener<BestScoreEventFromUi>(BestScoreEventHandler);
+
     }
 
     #endregion
@@ -61,18 +67,25 @@ namespace SOG.UI.PauseAndLoose
       if (eventDetails.isLosed)
       {
         view.Losed();
+        if (currentScore > BestScore)
+        {
+          BestScore = currentScore;
+          EventManager.Instance.Raise(new BestScoreEventFromUi(BestScore));
+        }
       }
-      else if (!eventDetails.isLosed)
-      {
-        view.Paused();
-      }
+      else if (!eventDetails.isLosed) { view.Paused(); }
     }
 
     private void UIScoreUpdateEventHandler(UIScoreUpdateEvent eventDetails)
     {
       view.UpdateScoreText(eventDetails.newScore);
+      currentScore = eventDetails.newScore;
     }
 
+    private void BestScoreEventHandler(BestScoreEventFromUi eventDetails) {
+      BestScore = eventDetails.bestScore;
+      view.UpdateBestScoreText(BestScore); 
+    }
     #endregion
 
   }

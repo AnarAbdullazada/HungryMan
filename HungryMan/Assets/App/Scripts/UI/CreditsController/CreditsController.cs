@@ -11,9 +11,11 @@ namespace SOG.UI.CreditsController
   {
     [Header("View")]
     [SerializeField] private CreditsView view;
+    [SerializeField] private AudioSource audioSource;
 
     public void BackToMenuButtonPressed()
     {
+      audioSource.Play();
       view.SetActivePanel(false);
       EventManager.Instance.Raise(new MainMenuButtonPressedEvent());
     }
