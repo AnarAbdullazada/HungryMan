@@ -7,7 +7,7 @@ using SOG.UI.PauseAndLoose;
 using SOG.UI.GamePlayUI;
 using SOG.CameraScript;
 using System;
-
+//Elshad Alma
 namespace SOG.Player
 {
   public class Eating : MonoBehaviour
